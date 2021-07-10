@@ -7,6 +7,7 @@ import { debounce } from "lodash";
 
 // @TODO: add alt to img
 //        get imgArr from api
+//        check array
 
 function App() {
   const imgArr = [
@@ -39,6 +40,9 @@ function App() {
       "value": "https://bigvu-interviews-assets.s3.amazonaws.com/images/Eli.png"
     }
   ];
+
+
+
 
   const [color, setColor] = useState({
     white: false,
@@ -86,6 +90,16 @@ function App() {
       setImage(imgArr[imgInd].value);
       setAlt(imgArr[imgInd].name);
     }
+    var img = new Image();
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext('2d');
+    img.onload = () => {
+      console.log(img.alt);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, 640, 360);
+    }
+    img.src = image;
+    img.alt = alt;
   }
 
   function resetSelectElement() {

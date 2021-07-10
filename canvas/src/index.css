@@ -46,9 +46,10 @@ li a:active {
   justify-content: center;
 }
 
-.canvas {
+canvas {
   padding: 20px;
-  height: 400px;
+  height: 360px;
+  width: 640px;
   border-radius: 15px;
   position: relative;
   box-shadow: 0 0 15px rgb(211, 211, 211);
@@ -67,8 +68,6 @@ img {
   width: 640px;
   height: 360px;
 }
-
-
 
 .canvasMode23 {
   padding: 0;
