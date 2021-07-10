@@ -1,17 +1,7 @@
-function White(props) {
-    const image = props.image;
-    const text = props.imageText;
-    const imageAlt = props.imageAlt;
-    const mode = props.mode;
-
+function White() {
     return (
         <div className="imageBox">
-            {image === "" ? null : (
-                <div className={`white canvas ${mode === "1" ? "canvasMode23" : ""}`}>
-                    <img src={image} alt={imageAlt} className={`${mode === "1" ? "mode23" : ""}`} />
-                    <div className={`imgText ${mode === "1" ? "imgText23" : ""}`}>{text}</div>
-                </div>
-            )}
+            <canvas width="640" height="360" id="myCanvas" className="white"></canvas>
         </div>
     )
 }

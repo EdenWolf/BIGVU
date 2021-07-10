@@ -6,10 +6,6 @@ import { useState, useEffect } from 'react';
 import { debounce } from "lodash";
 import axios from 'axios';
 
-// @TODO: add alt to img
-//        get imgArr from api
-//        check array
-
 function App() {
 
   const [imgArr, setImgArr] = useState(null);
@@ -20,7 +16,7 @@ function App() {
   var [image, setImage] = useState("");
   var [alt, setAlt] = useState("");
   var [text, setText] = useState("");
-  const [mode, setMode] = useState("0");
+  var [mode23, setMode] = useState(false);
   var canvas = null;
   var ctx = null;
   var img = new Image();
@@ -40,7 +36,7 @@ function App() {
       });
 
       setImage("");
-      setMode("0");
+      setMode(false);
       setAlt("");
       setText("");
       document.getElementById("input").value = "";
@@ -56,7 +52,7 @@ function App() {
       })
 
       setImage("");
-      setMode("0");
+      setMode(false);
       setAlt("");
       setText("");
       document.getElementById("input").value = "";
@@ -65,7 +61,6 @@ function App() {
   }
 
   function clickImage(imgInd) {
-    if (!imgArr) return;
     if (imgInd < imgArr.length && imgInd >= 0) {
       image = (imgArr[imgInd].value);
       alt = (imgArr[imgInd].name);
@@ -76,13 +71,22 @@ function App() {
       ctx = canvas.getContext('2d');
       img.onload = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 0, 0, 640, 360);
+        drawImageOnCanvas();
         if (text !== "") {
           changeText(text);
         }
       }
       img.src = image;
       img.alt = alt;
+    }
+  }
+
+  const drawImageOnCanvas = () => {
+    if (!mode23) {
+      ctx.drawImage(img, 0, 0, 640, 360);
+    }
+    else {
+      ctx.drawImage(img, -215, 0, 640, 360);
     }
   }
 
@@ -96,8 +100,16 @@ function App() {
   }
 
   function clickMode(modeInd) {
-    if (modeInd === "0") setMode("0");
-    if (modeInd === "1") setMode("1");
+    if (modeInd === "0") {
+      mode23 = false;
+      canvas.classList.remove('canvas23');
+      changeText(text);
+    };
+    if (modeInd === "1") {
+      mode23 = true;
+      canvas.classList.add('canvas23');
+      changeText(text);
+    };
   }
 
   const textOnChange = debounce(t => {
@@ -111,11 +123,18 @@ function App() {
     }
     if (canvas) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(img, 0, 0, 640, 360);
+      drawImageOnCanvas();
+
       ctx.textAlign = "center";
       ctx.font = "50px Inter";
-      ctx.fillStyle = "white";
-      ctx.fillText(t, 320, 180);
+      if (!mode23) {
+        ctx.fillStyle = "white";
+        ctx.fillText(t, 320, 180);
+      }
+      else {
+        ctx.fillStyle = "black";
+        ctx.fillText(t, 530, 180);
+      }
       text = t;
     }
   }
@@ -151,10 +170,10 @@ function App() {
       </div>
       <Switch>
         <Route path="/white">
-          <White image={image} imageText={text} imageAlt={alt} mode={mode} />
+          <White />
         </Route>
         <Route path="/blue">
-          <Blue image={image} imageText={text} imageAlt={alt} mode={mode} />
+          <Blue />
         </Route>
       </Switch>
     </Router >

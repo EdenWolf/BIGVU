@@ -56,6 +56,10 @@ canvas {
   overflow: hidden;
 }
 
+.canvas23 {
+  padding: 0;
+}
+
 .blue {
   background-color: rgb(37, 106, 255);
 }
