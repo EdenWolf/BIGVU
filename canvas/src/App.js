@@ -88,8 +88,6 @@ function App() {
 
   function clickImage(imgInd) {
     if (imgInd < imgArr.length && imgInd >= 0) {
-      console.log("set image and alt")
-      console.log("set alt: " + imgArr[imgInd].name);
       image = (imgArr[imgInd].value);
       alt = (imgArr[imgInd].name);
     }
@@ -97,14 +95,11 @@ function App() {
     canvas = document.getElementById("myCanvas");
     if (canvas) {
       ctx = canvas.getContext('2d');
-      console.log("alt: " + alt);
       img.onload = () => {
-        console.log("print: " + img.alt);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(img, 0, 0, 640, 360);
-        if (text != "") {
-          ctx.font = "30px Arial";
-          ctx.fillText(text, 10, 50);
+        if (text !== "") {
+          changeText(text);
         }
       }
       img.src = image;
@@ -127,20 +122,24 @@ function App() {
   }
 
   const textOnChange = debounce(t => {
+    changeText(t);
+  }, 500);
+
+  const changeText = t => {
     if (!canvas) {
       canvas = document.getElementById("myCanvas");
       ctx = canvas.getContext('2d');
     }
     if (canvas) {
-      console.log(ctx);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, 0, 0, 640, 360);
-      ctx.font = "30px Arial";
-      ctx.fillText(t, 10, 50);
+      ctx.textAlign = "center";
+      ctx.font = "50px Inter";
+      ctx.fillStyle = "white";
+      ctx.fillText(t, 320, 180);
       text = t;
     }
-
-  }, 500);
+  }
 
   const pathname = window.location.pathname;
 
