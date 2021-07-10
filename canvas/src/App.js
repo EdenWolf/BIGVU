@@ -52,6 +52,7 @@ function App() {
   const [mode, setMode] = useState("0");
   var canvas = null;
   var ctx = null;
+  var img = new Image();
 
   function navClickWhite() {
     if (!color.white) {
@@ -92,7 +93,7 @@ function App() {
       image = (imgArr[imgInd].value);
       alt = (imgArr[imgInd].name);
     }
-    var img = new Image();
+
     canvas = document.getElementById("myCanvas");
     if (canvas) {
       ctx = canvas.getContext('2d');
@@ -101,6 +102,10 @@ function App() {
         console.log("print: " + img.alt);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(img, 0, 0, 640, 360);
+        if (text != "") {
+          ctx.font = "30px Arial";
+          ctx.fillText(text, 10, 50);
+        }
       }
       img.src = image;
       img.alt = alt;
@@ -121,9 +126,20 @@ function App() {
     if (modeInd === "1") setMode("1");
   }
 
-  const textOnChange = debounce(text => {
-    ctx.font = "30px Arial";
-    ctx.fillText(text, 10, 50);
+  const textOnChange = debounce(t => {
+    if (!canvas) {
+      canvas = document.getElementById("myCanvas");
+      ctx = canvas.getContext('2d');
+    }
+    if (canvas) {
+      console.log(ctx);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, 640, 360);
+      ctx.font = "30px Arial";
+      ctx.fillText(t, 10, 50);
+      text = t;
+    }
+
   }, 500);
 
   const pathname = window.location.pathname;
