@@ -42,16 +42,16 @@ function App() {
   ];
 
 
-
-
   const [color, setColor] = useState({
     white: false,
     blue: false,
   });
-  const [image, setImage] = useState("");
-  const [alt, setAlt] = useState("");
-  const [text, setText] = useState("");
+  var [image, setImage] = useState("");
+  var [alt, setAlt] = useState("");
+  var [text, setText] = useState(""); //// @TODO: delete?
   const [mode, setMode] = useState("0");
+  var canvas = null;
+  var ctx = null;
 
   function navClickWhite() {
     if (!color.white) {
@@ -87,19 +87,24 @@ function App() {
 
   function clickImage(imgInd) {
     if (imgInd < imgArr.length && imgInd >= 0) {
-      setImage(imgArr[imgInd].value);
-      setAlt(imgArr[imgInd].name);
+      console.log("set image and alt")
+      console.log("set alt: " + imgArr[imgInd].name);
+      image = (imgArr[imgInd].value);
+      alt = (imgArr[imgInd].name);
     }
     var img = new Image();
-    var canvas = document.getElementById("myCanvas");
-    var ctx = canvas.getContext('2d');
-    img.onload = () => {
-      console.log(img.alt);
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(img, 0, 0, 640, 360);
+    canvas = document.getElementById("myCanvas");
+    if (canvas) {
+      ctx = canvas.getContext('2d');
+      console.log("alt: " + alt);
+      img.onload = () => {
+        console.log("print: " + img.alt);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, 640, 360);
+      }
+      img.src = image;
+      img.alt = alt;
     }
-    img.src = image;
-    img.alt = alt;
   }
 
   function resetSelectElement() {
@@ -116,7 +121,10 @@ function App() {
     if (modeInd === "1") setMode("1");
   }
 
-  const textOnChange = debounce(text => { setText(text) }, 500);
+  const textOnChange = debounce(text => {
+    ctx.font = "30px Arial";
+    ctx.fillText(text, 10, 50);
+  }, 500);
 
   const pathname = window.location.pathname;
 
