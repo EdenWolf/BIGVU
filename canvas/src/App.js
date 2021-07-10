@@ -2,57 +2,35 @@ import './App.css';
 import { Route, BrowserRouter as Router, Switch, Link } from "react-router-dom";
 import White from './pages/White';
 import Blue from './pages/Blue';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { debounce } from "lodash";
+import axios from 'axios';
 
 // @TODO: add alt to img
 //        get imgArr from api
 //        check array
 
 function App() {
-  const imgArr = [
-    {
-      "name": "Daisi",
-      "value": "https://bigvu-interviews-assets.s3.amazonaws.com/images/Daisi.png"
-    },
-    {
-      "name": "Shiri",
-      "value": "https://bigvu-interviews-assets.s3.amazonaws.com/images/Shiri.png"
-    },
-    {
-      "name": "Sarha",
-      "value": "https://bigvu-interviews-assets.s3.amazonaws.com/images/Sarha.png"
-    },
-    {
-      "name": "Rivka",
-      "value": "https://bigvu-interviews-assets.s3.amazonaws.com/images/Rivka.png"
-    },
-    {
-      "name": "Noa",
-      "value": "https://bigvu-interviews-assets.s3.amazonaws.com/images/Noa.png"
-    },
-    {
-      "name": "Erika",
-      "value": "https://bigvu-interviews-assets.s3.amazonaws.com/images/Erika.png"
-    },
-    {
-      "name": "Eli",
-      "value": "https://bigvu-interviews-assets.s3.amazonaws.com/images/Eli.png"
-    }
-  ];
 
-
+  const [imgArr, setImgArr] = useState(null);
   const [color, setColor] = useState({
     white: false,
     blue: false,
   });
   var [image, setImage] = useState("");
   var [alt, setAlt] = useState("");
-  var [text, setText] = useState(""); //// @TODO: delete?
+  var [text, setText] = useState("");
   const [mode, setMode] = useState("0");
   var canvas = null;
   var ctx = null;
   var img = new Image();
+
+  useEffect(() => {
+    axios.get("/presenters.json")
+      .then(res => {
+        setImgArr(res.data);
+      })
+  }, []);
 
   function navClickWhite() {
     if (!color.white) {
@@ -87,6 +65,7 @@ function App() {
   }
 
   function clickImage(imgInd) {
+    if (!imgArr) return;
     if (imgInd < imgArr.length && imgInd >= 0) {
       image = (imgArr[imgInd].value);
       alt = (imgArr[imgInd].name);
@@ -157,7 +136,7 @@ function App() {
         <div className="menuItem">
           <select className="mySelect" id="mySelect" onChange={e => clickImage(e.target.value - 1)}>
             <option value="0">Choose Background</option>
-            {imgArr.map((img, index) => <option value={index + 1}>{img.name}</option>)}
+            {imgArr ? imgArr.map((img, index) => <option value={index + 1}>{img.name}</option>) : null}
           </select>
         </div>
         <div className="menuItem">
